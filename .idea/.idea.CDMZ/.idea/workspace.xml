@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7df96788-26fd-478f-b585-e5c919b7ae45" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FC280261-B06A-412D-8964-9EFFF4649CD8/41/c00c0bbd/TypeReference.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FC280261-B06A-412D-8964-9EFFF4649CD8/d8/be61d88c/MemberReference.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/DDACB264-42C8-4CAE-A0EF-9D4D116F80D6/99/228014ae/MethodInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FC280261-B06A-412D-8964-9EFFF4649CD8/3a/8e03bf85/Mixin.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CDMZ/EventSystem/MainMenuShownEvent.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FC280261-B06A-412D-8964-9EFFF4649CD8/1a/cf5cc47c/MethodReference.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CDMZ/EventSystem/EventBus.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CDMZ/EventSystem/Event.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FC280261-B06A-412D-8964-9EFFF4649CD8/20/7be91940/DefaultMetadataImporter.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FC280261-B06A-412D-8964-9EFFF4649CD8/99/3224c7b3/ILProcessor.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/DDACB264-42C8-4CAE-A0EF-9D4D116F80D6/0b/e8cf7c38/Type.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FC280261-B06A-412D-8964-9EFFF4649CD8/7c/5f600fb3/Instruction.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CDMZ/EventSystem/CharacterSpawnEvent.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FC280261-B06A-412D-8964-9EFFF4649CD8/84/3815f16b/ModuleDefinition.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/936EF2A3-3E6A-4CBC-BE9D-46DF4B8735CF/c7/7b0ccaa7/Character.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/CF672032-07CA-4316-B718-CD8DC0747808/17/f22ae0ba/DateTime.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A1FD03E6-53EF-477C-B52F-94915ED471D4/b4/d0ce430e/HarmonyInstance.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/metadata/936EF2A3-3E6A-4CBC-BE9D-46DF4B8735CF/6e/8bf2551a/Assembly-CSharp.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3301A6D4-0D21-46CF-9552-BBC6826AB07D/92/17667503/EntityEventListener`1.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CDMZInjector/Injector.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/61D6FA3F-7157-4181-821D-0B4F35AA5CCA/9c/b9a5340a/EntityEventListenerBase`1.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/61D6FA3F-7157-4181-821D-0B4F35AA5CCA/7c/40761dba/EntityEventListenerBase.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/61D6FA3F-7157-4181-821D-0B4F35AA5CCA/4c/e76ca92b/EntityBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CDMZ/ModdingZoneHooks.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CDMZ/Logger.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/936EF2A3-3E6A-4CBC-BE9D-46DF4B8735CF/08/94a9548a/Singleton`1.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/715772E6-E4B0-47D0-A8AE-0E7213D3A803/8d/a5936bb3/Object.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CDMZ/HarmonyHooks.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CDMZ/EventListener.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/A1FD03E6-53EF-477C-B52F-94915ED471D4/ca/8a801e79/HarmonyMethod.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/CDMZInjector/Class1.cs" />
+        <option value="$PROJECT_DIR$/CDMZInjector/Injector.cs" />
+        <option value="$PROJECT_DIR$/CDMZ/Logger.cs" />
+        <option value="$PROJECT_DIR$/CDMZ/EventSystem/MainMenuShownEvent.cs" />
+        <option value="$PROJECT_DIR$/CDMZ/CDMZ.csproj" />
+        <option value="$PROJECT_DIR$/CDMZ/EventSystem/Event.cs" />
+        <option value="$PROJECT_DIR$/CDMZ/EventSystem/EventBus.cs" />
+        <option value="$PROJECT_DIR$/CDMZ/EventSystem/CharacterSpawnEvent.cs" />
+        <option value="$PROJECT_DIR$/CDMZ/EventListener.cs" />
+        <option value="$PROJECT_DIR$/CDMZ/HarmonyHooks.cs" />
+        <option value="$PROJECT_DIR$/CDMZ/ModdingZoneHooks.cs" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1OhFIvlrCu3aPtghZddpHYFIsjU" />
+  <component name="PropertiesComponent">
+    <property name="Rider.DefaultBreakpoints.AreToggled" value="true" />
+    <property name="Rider.ProjectViewActivator.IsNotFirstRun" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Deps/0Harmony.dll" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Native Executable.Build+Launch CDDZ">
+    <configuration name="Inject" type="DotNetProject" factoryName=".NET Project">
+      <option name="EXE_PATH" value="$PROJECT_DIR$/CDMZInjector/bin/Debug/CDMZInjector.exe" />
+      <option name="PROGRAM_PARAMETERS" value="&quot;D:\Games\SteamLibrary\steamapps\common\Clone Drone in the Danger Zone\Clone Drone in the Danger Zone_Data\Managed\Assembly-CSharp.dll&quot;" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CDMZInjector/bin/Debug" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/CDMZInjector/CDMZInjector.csproj" />
+      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+      <option name="PROJECT_KIND" value="Console" />
+      <option name="PROJECT_TFM" value=".NETFramework,Version=v3.5" />
+      <method v="2">
+        <option name="Build" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Build+Launch CDDZ" type="RunNativeExe" factoryName="Native Executable">
+      <option name="EXE_PATH" value="D:/Games/SteamLibrary/steamapps/common/Clone Drone in the Danger Zone/Clone Drone in the Danger Zone.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="D:/Games/SteamLibrary/steamapps/common/Clone Drone in the Danger Zone" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <method v="2">
+        <option name="Build Solution" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="userSelectedPid" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="userSelectedPid" value="false" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue=".NET Project.Inject" />
+      <item itemvalue="Attach to Unity Editor.Attach to Unity Editor" />
+      <item itemvalue="Attach to Unity Editor.Attach to Unity Editor &amp; Play" />
+      <item itemvalue="Native Executable.Build+Launch CDDZ" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7df96788-26fd-478f-b585-e5c919b7ae45" name="Default Changelist" comment="" />
+      <created>1546684699263</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1546684699263</updated>
+      <workItem from="1546684701713" duration="4713000" />
+      <workItem from="1546689436385" duration="1385000" />
+      <workItem from="1546708355476" duration="1296000" />
+      <workItem from="1564421850730" duration="63000" />
+      <workItem from="1564421941611" duration="3719000" />
+      <workItem from="1564432755104" duration="2235000" />
+    </task>
+    <servers />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
+  <component name="VcsManagerConfiguration">
+    <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="734" y="373" key="#com.intellij.execution.impl.EditConfigurationsDialog" />
+    <state x="734" y="373" key="#com.intellij.execution.impl.EditConfigurationsDialog/2560.1440/1920.1080" />
+    <state x="960" y="454" width="1006" height="546" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" />
+    <state x="960" y="454" width="1006" height="546" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/2560.1440/1920.1080" />
+    <state width="2517" height="401" key="GridCell.Tab.0.bottom" />
+    <state width="2517" height="401" key="GridCell.Tab.0.bottom/2560.1440/1920.1080" />
+    <state width="2517" height="401" key="GridCell.Tab.0.center" />
+    <state width="2517" height="401" key="GridCell.Tab.0.center/2560.1440/1920.1080" />
+    <state width="2517" height="401" key="GridCell.Tab.0.left" />
+    <state width="2517" height="401" key="GridCell.Tab.0.left/2560.1440/1920.1080" />
+    <state width="2517" height="401" key="GridCell.Tab.0.right" />
+    <state width="2517" height="401" key="GridCell.Tab.0.right/2560.1440/1920.1080" />
+    <state x="860" y="420" key="IDE.errors.dialog" />
+    <state x="860" y="420" key="IDE.errors.dialog/2560.1440/1920.1080" />
+    <state width="300" height="277" key="javadoc.popup.new" />
+    <state width="300" height="277" key="javadoc.popup.new/2560.1440/1920.1080" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" suspend="NONE" type="DotNet Exception Breakpoints">
+          <properties exception="System.Threading.ThreadAbortException" displayValue="System.Threading.ThreadAbortException" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>typeof(ModdingZoneHooks)</expression-string>
+        <language-id>C#</language-id>
+        <custom-info>RiderImportsList:</custom-info>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+</project>

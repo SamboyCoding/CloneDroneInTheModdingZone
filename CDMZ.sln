@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDMZ", "CDMZ\CDMZ.csproj", "{6AA7F049-5CD4-48FF-B6B6-AA34F513CAF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDMZInjector", "CDMZInjector\CDMZInjector.csproj", "{8469EE7D-D4CE-455C-99E6-E6C7B48D87D0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6AA7F049-5CD4-48FF-B6B6-AA34F513CAF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AA7F049-5CD4-48FF-B6B6-AA34F513CAF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AA7F049-5CD4-48FF-B6B6-AA34F513CAF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AA7F049-5CD4-48FF-B6B6-AA34F513CAF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8469EE7D-D4CE-455C-99E6-E6C7B48D87D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8469EE7D-D4CE-455C-99E6-E6C7B48D87D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8469EE7D-D4CE-455C-99E6-E6C7B48D87D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8469EE7D-D4CE-455C-99E6-E6C7B48D87D0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
