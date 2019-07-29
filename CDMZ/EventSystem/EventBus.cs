@@ -36,8 +36,18 @@ namespace CDMZ.EventSystem
             _logger.Debug($"Dispatching an event of type {evt.GetType()}");
 
             if (!handlers.ContainsKey(evt.GetType())) return true;
-            
-            foreach (var action in handlers[evt.GetType()]) action.Invoke(evt);
+
+            foreach (var action in handlers[evt.GetType()])
+            {
+                try
+                {
+                    action.Invoke(evt);
+                }
+                catch (Exception e)
+                {
+                    _logger.Exception(e, $"Exception thrown in event handler for event {evt}:");
+                }
+            }
 
             return !evt.IsCancelled();
         }

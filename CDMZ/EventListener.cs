@@ -8,8 +8,8 @@ namespace CDMZ
         {
             EventBus.Instance.Register((CharacterSpawnEvent e) =>
             {
-                //I don't like hammer bots
-                if (e.CharacterBeingSpawned.CharacterType == EnemyType.Hammer1)
+                //I don't like mk1 swords
+                if (e.CharacterBeingSpawned.CharacterType == EnemyType.Swordsman1)
                     e.Cancel();
             });
         }
