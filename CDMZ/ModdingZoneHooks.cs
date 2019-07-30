@@ -21,8 +21,6 @@ namespace CDMZ
         {
             try
             {
-                HarmonyHooks.GameFlowManagerPostFix.startTimeTicks = DateTime.Now.Ticks;
-                
                 if (!_init)
                 {
                     VanillaLogger.Info("Game Starting!");

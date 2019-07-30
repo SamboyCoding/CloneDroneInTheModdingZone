@@ -35,9 +35,9 @@ namespace CDMZ
             modText.text = "CDMZ : Initializing";
             modText.alignment = TextAnchor.UpperLeft;
 
-            _logger.Debug($"Injected splash screen at pos {transform1.localPosition}. Size {modText.preferredWidth}x{modText.preferredHeight}: {modText}");
+            _logger.Debug($"Injected splash screen label at pos {transform1.localPosition}. Size {modText.preferredWidth}x{modText.preferredHeight}: {modText}");
             
-            SceneManager.GetActiveScene().DumpHierarchy(_logger);
+            //SceneManager.GetActiveScene().DumpHierarchy(_logger);
 
             var launchThread = new Thread(() =>
             {

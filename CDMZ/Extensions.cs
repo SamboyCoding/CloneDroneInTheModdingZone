@@ -29,12 +29,29 @@ namespace CDMZ
             
             void DumpRecursive(GameObject gameObject, int indentLevel = 0)
             {
-                dumpTo.Debug($"{"    ".Repeat(indentLevel)}{gameObject} ({gameObject.transform.childCount} children). Pos: Local {gameObject.transform.localPosition} / Global {gameObject.transform.position}.");
+                dumpTo.Debug($"{"    ".Repeat(indentLevel)}{gameObject} ({gameObject.transform.childCount} children). Pos: Local {gameObject.transform.localPosition} / Global {gameObject.transform.position}. Scale: {gameObject.transform.localScale}");
                 foreach (Transform child in gameObject.transform)
                 {
                     DumpRecursive(child.gameObject, indentLevel + 1);
                 }
             }
+        }
+        
+        public static GameObject GetChildByName(this GameObject o, string name)
+        {
+            return o.transform.Find(name).gameObject;
+        }
+
+        public static void MoveDown(this GameObject o, float amount)
+        {
+            var localPosition = o.transform.localPosition;
+            o.transform.localPosition = new Vector3(localPosition.x, localPosition.y - amount);
+        }
+
+        public static void GrowVertical(this GameObject o, float amount)
+        {
+            var localScale = o.transform.localScale;
+            o.transform.localScale = new Vector3(localScale.x, localScale.y + amount);
         }
     }
 }

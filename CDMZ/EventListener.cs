@@ -8,8 +8,15 @@ namespace CDMZ
         {
             EventBus.Instance.Register((CharacterPreSpawnEvent e) =>
             {
-                //I don't like mk1 swords
-                if (!e.IsPlayerSpawn && e.enemyType == EnemyType.Swordsman1)
+                //I don't like mk1 bows
+                if (!e.IsPlayerSpawn && e.enemyType == EnemyType.Bowman1)
+                    e.Cancel();
+            });
+            
+            EventBus.Instance.Register((PreDamageEvent e) =>
+            {
+                //Player godmode
+                if (e.Damagee.IsMainPlayer())
                     e.Cancel();
             });
         }

@@ -265,15 +265,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventListener.cs" />
+    <Compile Include="EventSystem\CharacterDespawnEvent.cs" />
     <Compile Include="EventSystem\CharacterPostSpawnEvent.cs" />
     <Compile Include="EventSystem\CharacterPreSpawnEvent.cs" />
     <Compile Include="EventSystem\Event.cs" />
     <Compile Include="EventSystem\EventBus.cs" />
     <Compile Include="EventSystem\MainMenuShownEvent.cs" />
+    <Compile Include="EventSystem\PreDamageEvent.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Find.cs" />
     <Compile Include="HarmonyHooks.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="ModdingZoneHooks.cs" />
+    <Compile Include="ModTypeManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CDMZSplashScreenManager.cs" />
   </ItemGroup>

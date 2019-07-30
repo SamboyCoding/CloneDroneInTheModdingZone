@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace CDMZ.EventSystem
 {
-    public class EventBus
+    public sealed class EventBus
     {
         public static EventBus Instance { get; private set; }
         
