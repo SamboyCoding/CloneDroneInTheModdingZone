@@ -4,12 +4,19 @@ using System.Linq;
 
 namespace CDMZ.EventSystem
 {
-    public class EventBus : Singleton<EventBus>
+    public class EventBus
     {
+        public static EventBus Instance { get; private set; }
+        
         private Logger _logger = new Logger("CDMZ|EventBus");
         
         private Dictionary<Type, List<Action<Event>>> handlers = new Dictionary<Type, List<Action<Event>>>();
-        
+
+        internal EventBus()
+        {
+            Instance = this;
+        }
+
         internal void Register<T>(Action<T> handler) where T : Event
         {
             var type = typeof(T);

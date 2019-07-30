@@ -1,12 +1,12 @@
 namespace CDMZ.EventSystem
 {
-    public class CharacterSpawnEvent : Event
+    public class CharacterPreSpawnEvent : Event
     {
         public bool IsPlayerSpawn { get; private set; }
         
         public EnemyType enemyType;
 
-        public CharacterSpawnEvent(EnemyType t)
+        public CharacterPreSpawnEvent(EnemyType t)
         {
             IsPlayerSpawn = false;
             enemyType = t;

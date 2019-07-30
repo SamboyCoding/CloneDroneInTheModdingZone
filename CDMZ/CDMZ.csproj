@@ -265,14 +265,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventListener.cs" />
-    <Compile Include="EventSystem\CharacterSpawnEvent.cs" />
+    <Compile Include="EventSystem\CharacterPostSpawnEvent.cs" />
+    <Compile Include="EventSystem\CharacterPreSpawnEvent.cs" />
     <Compile Include="EventSystem\Event.cs" />
     <Compile Include="EventSystem\EventBus.cs" />
     <Compile Include="EventSystem\MainMenuShownEvent.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="HarmonyHooks.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="ModdingZoneHooks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CDMZSplashScreenManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

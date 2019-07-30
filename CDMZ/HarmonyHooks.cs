@@ -20,16 +20,27 @@ namespace CDMZ
          */
         private static List<Character> allKnownCharacters = new List<Character>();
 
-        public static void Init()
+        public static void DoInitialPatches()
         {
-            ModdingZoneHooks.ModZoneLogger.Info("HarmonyHooks Patching...");
+            ModdingZoneHooks.ModZoneLogger.Info("Injecting splash manager...");
 
+            //Splash Screen Patches
+            //When this is first executed NOTHING is set up. No SplashScreenFlowManager, no nothing.
+            //So we patch Update() and on first frame we set stuff up, and we'll let that handle everything.
+
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(SplashScreenFlowManager), "Update"), new HarmonyMethod(typeof(HarmonyHooks), nameof(InitialSplashScreenSetup)));
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(SplashScreenFlowManager), nameof(SplashScreenFlowManager.GoToNextScene)), new HarmonyMethod(typeof(CDMZSplashScreenManager), nameof(CDMZSplashScreenManager.GoToNextSceneReplacement)));
+        }
+
+        public static void DoOnLoadPatches()
+        {
             //Character patches.
             
             //Patch to disable spawn
-            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(EnemyFactory), nameof(EnemyFactory.SpawnEnemyWithRotation), new []{typeof(Transform), typeof(Vector3), typeof(Vector3), typeof(CharacterModel)}), prefix: new HarmonyMethod(typeof(HarmonyHooks), nameof(OnCharacterSpawn)));
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(EnemyFactory), nameof(EnemyFactory.SpawnEnemyWithRotation), new []{typeof(Transform), typeof(Vector3), typeof(Vector3), typeof(CharacterModel)}), new HarmonyMethod(typeof(HarmonyHooks), nameof(PreCharacterSpawn)));
             
             //TODO: Patch to add to the char list
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(Character), "Awake"), new HarmonyMethod(typeof(HarmonyHooks), nameof(PostCharacterSpawn)));
             
             //Patch to fix non null safe code
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method("<SpawnCurrentLevel>c__Iterator2:MoveNext"), transpiler: new HarmonyMethod(typeof(HarmonyHooks), nameof(LevelManagerSpawnCancelPatch)));
@@ -54,23 +65,45 @@ namespace CDMZ
             {
                 var span = new TimeSpan(DateTime.Now.Ticks - startTimeTicks);
                 ModdingZoneHooks.VanillaLogger.Info("Main game flow initialized and title screen shown in " + span.TotalMilliseconds + " milliseconds.");
+                EventBus.Instance.Post(new MainMenuShownEvent());
             }
         }
 
-        public static bool OnCharacterSpawn(Transform enemyPrefab, Vector3 spawnPosition, Vector3 spawnRotation, CharacterModel characterModelOverride)
+        private static bool _splashSetup = false;
+        
+        public static void InitialSplashScreenSetup()
+        {
+            if (!_splashSetup)
+            {
+                _splashSetup = true;
+                SplashScreenFlowManager.Instance.gameObject.AddComponent<CDMZSplashScreenManager>();
+            }
+        }
+
+        public static bool DisableMethod()
+        {
+            return false;
+        }
+
+        public static bool PreCharacterSpawn(Transform enemyPrefab, Vector3 spawnPosition, Vector3 spawnRotation, CharacterModel characterModelOverride)
         {
             //Try to find enemy type
             var config = EnemyFactory.Instance.Enemies.First(c => c.EnemyPrefab == enemyPrefab);
             
             ModdingZoneHooks.ModZoneLogger.Debug($"Spawning a character of type {config.EnemyType}");
 
-            if (!EventBus.Instance.Post(new CharacterSpawnEvent(config.EnemyType)))
+            if (!EventBus.Instance.Post(new CharacterPreSpawnEvent(config.EnemyType)))
             {
                 ModdingZoneHooks.ModZoneLogger.Debug($"Preventing spawn of character of type {config.EnemyType}");
                 return false;
             }
 
             return true;
+        }
+
+        public static void PostCharacterSpawn(Character __instance)
+        {
+            EventBus.Instance.Post(new CharacterPostSpawnEvent(__instance));
         }
 
         public static void OnCharacterDestroy(Character __instance)
@@ -102,16 +135,15 @@ namespace CDMZ
                                                                && info.Name == nameof(EnemyFactory.SpawnEnemy))
                     {
                         foundSpawnEnemy = true;
-                        _logger.Debug($"Yield1 {instruction}");
+//                        _logger.Debug($"Yield1 {instruction}");
                         yield return instruction;
                     }
                     else if (foundSpawnEnemy && !amended && instruction.opcode == OpCodes.Stloc_S)
                     {
-                        _logger.Debug(instruction.operand.GetType().ToString());
                         amended = true;
                         _logger.Debug("Patching LevelManager's SpawnCurrentLevel to allow nulls from SpawnEnemy");
 
-                        _logger.Debug($"Yield2 {instruction}");
+//                        _logger.Debug($"Yield2 {instruction}");
                         yield return instruction; //We still have to store the enemy as a local.
 
                         enumerator.MoveNext();
@@ -139,34 +171,34 @@ namespace CDMZ
 
                         //Load the enemy back onto the stack
                         var ret = new CodeInstruction(OpCodes.Ldloc_S, instruction.operand);
-                        _logger.Debug($"Yield2 {ret}");
+//                        _logger.Debug($"Yield2 {ret}");
                         yield return ret;
 
                         //If it's null jump over the four instructions
                         ret = new CodeInstruction(OpCodes.Brfalse, label);
-                        _logger.Debug($"Yield2 {ret}");
+//                        _logger.Debug($"Yield2 {ret}");
                         yield return ret;
 
                         //Otherwise we have to once more load the 
 
-                        _logger.Debug($"Yield2 {first}");
+//                        _logger.Debug($"Yield2 {first}");
                         yield return first;
 
-                        _logger.Debug($"Yield2 {second}");
+//                        _logger.Debug($"Yield2 {second}");
                         yield return second;
 
-                        _logger.Debug($"Yield2 {third}");
+//                        _logger.Debug($"Yield2 {third}");
                         yield return third;
 
-                        _logger.Debug($"Yield2 {fourth}");
+//                        _logger.Debug($"Yield2 {fourth}");
                         yield return fourth;
 
-                        _logger.Debug($"Yield2 {target}");
+//                        _logger.Debug($"Yield2 {target}");
                         yield return target;
                     }
                     else
                     {
-                        _logger.Debug($"Yield3 {instruction}");
+//                        _logger.Debug($"Yield3 {instruction}");
                         yield return instruction;
                     }
                     

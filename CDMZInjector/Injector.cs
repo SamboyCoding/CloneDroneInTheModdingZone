@@ -31,27 +31,27 @@ namespace CDMZInjector
             {
                 ReadWrite = true,
             });
-            Console.WriteLine("Module is valid. Trying to locate GameFlowManager.Start");
+            Console.WriteLine("Module is valid. Trying to locate SplashScreenFlowManager.Awake");
 
-            var targetType = module.Types.FirstOrDefault(type => type.Name == "GameFlowManager");
+            var targetType = module.Types.FirstOrDefault(type => type.Name == "SplashScreenFlowManager");
             if (targetType == null)
             {
-                Console.WriteLine("Couldn't find GameFlowManager");
+                Console.WriteLine("Couldn't find SplashScreenFlowManager");
                 Environment.Exit(2);
                 return;
             }
 
-            Console.WriteLine("Found GameFlowManager");
+            Console.WriteLine("Found SplashScreenFlowManager");
 
-            var targetMethod = targetType.Methods.FirstOrDefault(method => method.Name == "Start");
+            var targetMethod = targetType.Methods.FirstOrDefault(method => method.Name == "Awake");
             if (targetMethod == null)
             {
-                Console.WriteLine("Couldn't find GameFlowManager.Start");
+                Console.WriteLine("Couldn't find SplashScreenFlowManager.Start");
                 Environment.Exit(3);
                 return;
             }
 
-            Console.WriteLine("Found GameFlowManager.Start");
+            Console.WriteLine("Found SplashScreenFlowManager.Awake");
 
             var methodRef =
                 module.ImportReference(typeof(ModdingZoneHooks).GetMethod(nameof(ModdingZoneHooks.InitializeAll)));
