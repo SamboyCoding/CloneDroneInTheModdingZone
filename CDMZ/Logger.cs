@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using UnityEngine;
 
 namespace CDMZ
@@ -47,8 +49,31 @@ namespace CDMZ
         {
             Write($"[Error] [{_logPrefix}] {message}");
         }
+
+        public void DumpCurrentStack()
+        {
+            ExceptionActual("\n" + new StackTrace(), "Debug stack print");
+        }
         
-        public void Exception(Exception ex, string message = "")
+        public void Exception(Exception ex, string message = "Unexpected Error")
+        {
+            //Another quirk of c#: If an exception is never thrown it will not have a stack.
+            if (string.IsNullOrEmpty(ex.StackTrace))
+            {
+                try
+                {
+                    throw ex;
+                }
+                catch (Exception e)
+                {
+                    ex = e;
+                } 
+            }
+                
+            ExceptionActual(ex?.ToString(), message);
+        }
+
+        private void ExceptionActual(string ex, string message)
         {
             Write($"[Exception] [{_logPrefix}] {message}: {ex}");
         }
