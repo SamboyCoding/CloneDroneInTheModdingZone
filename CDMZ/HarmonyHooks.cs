@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
 using CDMZ.EventSystem;
+using CDMZ.Patches;
+using CDMZ.UI;
 using Harmony;
 using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -15,12 +12,7 @@ namespace CDMZ
 {
     public static class HarmonyHooks
     {
-        private static Logger _logger = new Logger("CDMZ|Harmony");
-        /**
-         * Contains a list of all the characters currently existing. We use this over CharacterTracker because that
-         * only contains ATTACHED characters, not all of them.
-         */
-        private static List<Character> allKnownCharacters = new List<Character>();
+        internal static Logger Logger = new Logger("CDMZ|Harmony");
 
         public static void DoInitialPatches()
         {
@@ -31,39 +23,38 @@ namespace CDMZ
             //So we patch Update() and on first frame we set stuff up, and we'll let that handle everything.
 
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(SplashScreenFlowManager), "Update"), new HarmonyMethod(typeof(HarmonyHooks), nameof(InitialSplashScreenSetup)));
-            
+
             //Make sure the splash screen doesn't end before we want it to.
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(SplashScreenFlowManager), nameof(SplashScreenFlowManager.GoToNextScene)), new HarmonyMethod(typeof(CDMZSplashScreenManager), nameof(CDMZSplashScreenManager.GoToNextSceneReplacement)));
         }
 
         public static void DoOnLoadPatches()
         {
-            //Character patches.
-            
-            //Patch to disable spawn
-            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(EnemyFactory), nameof(EnemyFactory.SpawnEnemyWithRotation), new []{typeof(Transform), typeof(Vector3), typeof(Vector3), typeof(CharacterModel)}), new HarmonyMethod(typeof(HarmonyHooks), nameof(PreCharacterSpawn)));
-            
-            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(Character), "Awake"), new HarmonyMethod(typeof(HarmonyHooks), nameof(PostCharacterSpawn)));
-            
-            //Patch to fix non null safe code
-            ModdingZoneHooks.Harmony.Patch(AccessTools.Method("<SpawnCurrentLevel>c__Iterator2:MoveNext"), transpiler: new HarmonyMethod(typeof(HarmonyHooks), nameof(LevelManagerSpawnCancelPatch)));
-            
-            //Patch to broadcast destruction
-            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(Character), "OnDestroy"), new HarmonyMethod(typeof(HarmonyHooks), nameof(OnCharacterDestroy)));
-            
-            //Patch to potentially disable death
-            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(Character), "onDeath"), new HarmonyMethod(typeof(HarmonyHooks), nameof(OnCharacterDie)));
-            
-            _logger.Debug($"There are currently {ModTypeManager.AllGameRelatedTypes.Count} game-related types loaded");
-            
-            //Damage patches
-            foreach (var subclass in ModTypeManager.AllSubclassesOf(typeof(MeleeImpactArea)))
-            {
-                var method = AccessTools.Method(subclass, "tryDamageBodyPart");
-                if(method.DeclaringType != subclass) continue; //We only want direct overrides
+            #region Character Patches
 
-                ModdingZoneHooks.Harmony.Patch(method, new HarmonyMethod(typeof(HarmonyHooks), nameof(OnPreDamage)));
+            //Patch to allow disabling spawn
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(EnemyFactory), nameof(EnemyFactory.SpawnEnemyWithRotation), new[] {typeof(Transform), typeof(Vector3), typeof(Vector3), typeof(CharacterModel)}), new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.PreCharacterSpawn)));
+            //Patch for when a character spawns
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(Character), "Awake"), new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.PostCharacterSpawn)));
+            //Patch to fix non null safe code
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method("<SpawnCurrentLevel>c__Iterator2:MoveNext"), transpiler: new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.LevelManagerSpawnCancelPatch)));
+            //Patch for when a character('s ragdoll) is removed
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(Character), "OnDestroy"), new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.OnCharacterDestroy)));
+            //Patch to potentially disable death
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(Character), "onDeath"), new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.OnCharacterDie)));
+
+            //Damage patches
+            foreach (var method in
+                from subclass in ModTypeManager.AllSubclassesOf(typeof(MeleeImpactArea))
+                let method = AccessTools.Method(subclass, "tryDamageBodyPart")
+                where method.DeclaringType == subclass
+                select method)
+            {
+                ModdingZoneHooks.Harmony.Patch(method, new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.OnPreDamage)));
             }
+            #endregion
+            
+            
         }
 
 
@@ -75,14 +66,21 @@ namespace CDMZ
             [UsedImplicitly]
             public static void Postfix()
             {
+                UIComponents.Init();
+                
+                Logger.Info("Injecting mods list UI...");
+                
+                //Set up the mods list and inject into UI
+                var modsList = Object.Instantiate(UIComponents.ScrollablePrefab, Find.TitleScreenUI.transform, false);
+                modsList.AddComponent<ModsListUI>(); //Set up the singleton
+                
                 EventBus.Instance.Post(new MainMenuShownEvent());
                 //SceneManager.GetActiveScene().DumpHierarchy(new Logger("Scene Dump"));
 
                 GameFlowManager.Instance.gameObject.AddComponent<Logger.QuitDetector>();
-                
+
                 Find.TitleScreenUI.GetChildByName("VersionLabel").GetComponent<Text>().text += "\nModded with CDMZ\nBy Samboy063";
                 Find.TitleScreenUI.GetChildByName("VersionLabel").GetComponent<Text>().verticalOverflow = VerticalWrapMode.Overflow;
-                //Find.TitleScreenUI.GetChildByName("VersionLabel").MoveDown(-20);
 
                 Find.TitleScreenButtonList.GetChildByName("OptionsButton").MoveDown(20);
                 Find.TitleScreenButtonList.GetChildByName("LevelEditorButton").MoveDown(20);
@@ -92,18 +90,23 @@ namespace CDMZ
                 var modsButton = Object.Instantiate(Find.TitleScreenButtonList.GetChildByName("OptionsButton"), Find.TitleScreenButtonList.transform, true);
                 modsButton.transform.localPosition = new Vector3(modsButton.transform.localPosition.x, Find.TitleScreenButtonList.GetChildByName("OptionsButton").transform.localPosition.y + 32);
                 modsButton.GetComponentInChildren<Text>().text = "Mods";
+                modsButton.GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
+                modsButton.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    Logger.Debug("Mods button clicked");
+                    ModsListUI.Instance.gameObject.SetActive(true);
+                });
             }
         }
 
-        private static bool _splashSetup = false;
-        
+        private static bool _splashSetup;
+
         public static void InitialSplashScreenSetup()
         {
-            if (!_splashSetup)
-            {
-                _splashSetup = true;
-                SplashScreenFlowManager.Instance.gameObject.AddComponent<CDMZSplashScreenManager>();
-            }
+            if (_splashSetup) return;
+            
+            _splashSetup = true;
+            SplashScreenFlowManager.Instance.gameObject.AddComponent<CDMZSplashScreenManager>();
         }
 
         public static bool DisableMethod()
@@ -111,146 +114,7 @@ namespace CDMZ
             return false;
         }
 
-        public static bool PreCharacterSpawn(Transform enemyPrefab, Vector3 spawnPosition, Vector3 spawnRotation, CharacterModel characterModelOverride)
-        {
-            //Try to find enemy type
-            var config = EnemyFactory.Instance.Enemies.First(c => c.EnemyPrefab == enemyPrefab);
-            
-            ModdingZoneHooks.ModZoneLogger.Debug($"Spawning a character of type {config.EnemyType}");
 
-            if (!EventBus.Instance.Post(new CharacterPreSpawnEvent(config.EnemyType)))
-            {
-                ModdingZoneHooks.ModZoneLogger.Debug($"Preventing spawn of character of type {config.EnemyType}");
-                return false;
-            }
-
-            return true;
-        }
-
-        public static void PostCharacterSpawn(Character __instance)
-        {
-            EventBus.Instance.Post(new CharacterPostSpawnEvent(__instance));
-            allKnownCharacters.Add(__instance);
-        }
-
-        public static void OnCharacterDestroy(Character __instance)
-        {
-            ModdingZoneHooks.ModZoneLogger.Debug($"Removing destroyed character {__instance}");
-            allKnownCharacters.Remove(__instance);
-            
-            EventBus.Instance.Post(new CharacterDespawnEvent(__instance));
-        }
-
-        public static void OnCharacterDie(Character __instance)
-        {
-            ModdingZoneHooks.ModZoneLogger.Debug($"{__instance} died.");
-        }
-
-        public static bool OnPreDamage(MeleeImpactArea __instance, MechBodyPart bodyPart)
-        {
-            //TODO: this doesn't include spidertron ("MortarWalker") grenade fragments ("BulletProjectile"s)
-            
-            //Observations:
-            //Spear comes up as sword
-            //Fire doesn't come up at all
-            //Player-fired arrows have no owner
-            //Lots of lag from the log
-            
-            return EventBus.Instance.Post(new PreDamageEvent(__instance, bodyPart));
-        }
-
-        public static IEnumerable<CodeInstruction> LevelManagerSpawnCancelPatch(IEnumerable<CodeInstruction> i, ILGenerator generator)
-        {
-            var instructions = i.ToList();
-            var foundSpawnEnemy = false;
-            var amended = false;
-            using (var enumerator = instructions.GetEnumerator())
-            {
-                enumerator.MoveNext();
-                CodeInstruction instruction;
-                var pos = 0;
-                while ((instruction = enumerator.Current) != null)
-                {
-                    if (instruction.opcode == OpCodes.Callvirt && !foundSpawnEnemy
-                                                               && instruction.operand is MethodInfo info
-                                                               && info.DeclaringType == typeof(EnemyFactory)
-                                                               && info.Name == nameof(EnemyFactory.SpawnEnemy))
-                    {
-                        foundSpawnEnemy = true;
-//                        _logger.Debug($"Yield1 {instruction}");
-                        yield return instruction;
-                    }
-                    else if (foundSpawnEnemy && !amended && instruction.opcode == OpCodes.Stloc_S)
-                    {
-                        amended = true;
-                        _logger.Debug("Patching LevelManager's SpawnCurrentLevel to allow nulls from SpawnEnemy");
-
-//                        _logger.Debug($"Yield2 {instruction}");
-                        yield return instruction; //We still have to store the enemy as a local.
-
-                        enumerator.MoveNext();
-                        var first = enumerator.Current;
-                        pos++;
-                        
-                        enumerator.MoveNext();
-                        var second = enumerator.Current;
-                        pos++;
-                        
-                        enumerator.MoveNext();
-                        var third = enumerator.Current;
-                        pos++;
-                        
-                        enumerator.MoveNext();
-                        var fourth = enumerator.Current;
-                        pos++;
-
-                        enumerator.MoveNext();
-                        var target = enumerator.Current;
-                        pos++;
-                        
-                        var label = generator.DefineLabel();
-                        target.labels.Add(label);
-
-                        //Load the enemy back onto the stack
-                        var ret = new CodeInstruction(OpCodes.Ldloc_S, instruction.operand);
-//                        _logger.Debug($"Yield2 {ret}");
-                        yield return ret;
-
-                        //If it's null jump over the four instructions
-                        ret = new CodeInstruction(OpCodes.Brfalse, label);
-//                        _logger.Debug($"Yield2 {ret}");
-                        yield return ret;
-
-                        //Otherwise we have to once more load the 
-
-//                        _logger.Debug($"Yield2 {first}");
-                        yield return first;
-
-//                        _logger.Debug($"Yield2 {second}");
-                        yield return second;
-
-//                        _logger.Debug($"Yield2 {third}");
-                        yield return third;
-
-//                        _logger.Debug($"Yield2 {fourth}");
-                        yield return fourth;
-
-//                        _logger.Debug($"Yield2 {target}");
-                        yield return target;
-                    }
-                    else
-                    {
-//                        _logger.Debug($"Yield3 {instruction}");
-                        yield return instruction;
-                    }
-                    
-                    if(pos >= instructions.Count - 1)
-                        yield break;
-
-                    enumerator.MoveNext();
-                    pos++;
-                }
-            }
-        }
+        
     }
 }

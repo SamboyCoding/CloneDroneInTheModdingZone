@@ -20,21 +20,19 @@ namespace CDMZ
         public static void DumpHierarchy(this Scene scene, Logger dumpTo)
         {
             dumpTo.Debug("All Loaded Objects:\n\n");
-            foreach (var o in scene.GetRootGameObjects())
-            {
-                DumpRecursive(o);
-            }
             
+            foreach (var o in scene.GetRootGameObjects()) 
+                o.DumpRecursive(dumpTo);
+
             dumpTo.Debug("---End Dump---\n\n");
+        }
+        
+        public static void DumpRecursive(this GameObject gameObject, Logger dumpTo, int indentLevel = 0)
+        {
+            dumpTo.Debug($"{"    ".Repeat(indentLevel)}{gameObject} ({gameObject.transform.childCount} children). Pos: Local {gameObject.transform.localPosition} / Global {gameObject.transform.position}. Scale: {gameObject.transform.localScale}");
             
-            void DumpRecursive(GameObject gameObject, int indentLevel = 0)
-            {
-                dumpTo.Debug($"{"    ".Repeat(indentLevel)}{gameObject} ({gameObject.transform.childCount} children). Pos: Local {gameObject.transform.localPosition} / Global {gameObject.transform.position}. Scale: {gameObject.transform.localScale}");
-                foreach (Transform child in gameObject.transform)
-                {
-                    DumpRecursive(child.gameObject, indentLevel + 1);
-                }
-            }
+            foreach (Transform child in gameObject.transform) 
+                child.gameObject.DumpRecursive(dumpTo, indentLevel + 1);
         }
         
         public static GameObject GetChildByName(this GameObject o, string name)

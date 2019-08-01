@@ -5,11 +5,11 @@ using System.Reflection;
 
 namespace CDMZ
 {
-    public class ModTypeManager
+    public static class ModTypeManager
     {
         private static List<Assembly> _modAssemblies = new List<Assembly>();
 
-        public static List<Assembly> AllGameRelatedAssemblies
+        public static IEnumerable<Assembly> AllGameRelatedAssemblies
         {
             get
             {
@@ -19,15 +19,11 @@ namespace CDMZ
             }
         }
 
-        public static List<Type> AllGameRelatedTypes
-        {
-            get
-            {
-                return AllGameRelatedAssemblies
-                    .SelectMany(a => a.GetTypes())
-                    .ToList();
-            }
-        }
+        public static IEnumerable<Type> AllGameRelatedTypes => AllGameRelatedAssemblies
+            .SelectMany(a => a.GetTypes())
+            .ToList();
+
+        public static IEnumerable<Type> AllModClasses => AllSubclassesOf(typeof(Mod)).Where(t => t != typeof(Mod));
 
         public static List<Type> AllDirectSubclassesOf(Type t)
         {

@@ -61,9 +61,11 @@ namespace CDMZ
             if (!_init && File.Exists(LogFilePath)) File.Delete(LogFilePath);
             _init = true;
 
-            _log += $"[{DateTime.Now}] {message}\n";
+            var msg = $"[{DateTime.Now}] {message}\n"; 
+            _log += msg;
             
-            logQueue.Enqueue($"[{DateTime.Now}] {message}\n");
+            logQueue.Enqueue(msg);
+            UnityEngine.Debug.Log(msg);
         }
 
         public void Debug(string message)

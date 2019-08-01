@@ -32,7 +32,7 @@ namespace CDMZ
             var transform1 = modText.transform;
             transform1.localPosition =  new Vector3(-30, 280);
             modText.gameObject.SetActive(true);
-            modText.text = "CDMZ : Initializing";
+            modText.text = "CDMZ : Running Init Patches";
             modText.alignment = TextAnchor.UpperLeft;
 
             _logger.Debug($"Injected splash screen label at pos {transform1.localPosition}. Size {modText.preferredWidth}x{modText.preferredHeight}: {modText}");
@@ -44,6 +44,10 @@ namespace CDMZ
                 try
                 {
                     HarmonyHooks.DoOnLoadPatches();
+                    
+                    modText.text = "CDMZ: Constructing mods";
+                    
+                    ModManager.ConstructAll();
 
                     modText.text = "CDMZ: Setting up event bus";
 
