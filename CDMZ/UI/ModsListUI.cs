@@ -61,8 +61,8 @@ namespace CDMZ.UI
                 {
                     entry.GetChildByName("GrayPanelGreenText").SetActive(false);
                     entry.GetChildByName("GrayPanel").SetActive(true);
-                    entry.GetChildByName("GrayPanel").GetChildByName("GrayPanelRedText").GetComponent<Text>().text = $"v{mod.GetLatestVersion()}";
-                    entry.GetChildByName("GrayPanel").GetChildByName("GrayPanelGrayText").GetComponent<Text>().text = $"Update: v{mod.GetVersion()}";
+                    entry.GetChildByName("GrayPanel").GetChildByName("GrayPanelRedText").GetComponent<Text>().text = $"Latest: v{mod.GetLatestVersion()}";
+                    entry.GetChildByName("GrayPanel").GetChildByName("GrayPanelGrayText").GetComponent<Text>().text = $"Current: v{mod.GetVersion()}";
                 }
             }
         }

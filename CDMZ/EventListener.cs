@@ -15,13 +15,18 @@ namespace CDMZ
                     e.Cancel();
             });
             
-            EventBus.Instance.Register((PreDamageEvent e) =>
+            EventBus.Instance.Register((CharacterPreDamageEvent e) =>
             {
                 //Player godmode
-                if (e.Damagee.IsMainPlayer())
-                    e.Cancel();
+//                if (e.Damagee.IsMainPlayer())
+//                    e.Cancel();
             });
             
+            EventBus.Instance.Register((AboutToLoadNextLevelEvent e) =>
+            {
+                ModdingZoneHooks.VanillaLogger.Info($"Loading level '${e.LevelName}'. Legacy: {e.IsALegacyLevel}");
+            });
+
             EventBus.Instance.Register((MainMenuShownEvent evt) =>
             {
 //                var log = new Logger("RaptorDump");

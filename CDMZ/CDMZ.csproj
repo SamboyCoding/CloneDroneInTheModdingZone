@@ -274,6 +274,7 @@
     <Compile Include="EventSystem\EventBus.cs" />
     <Compile Include="EventSystem\MainMenuShownEvent.cs" />
     <Compile Include="EventSystem\CharacterPreDamageEvent.cs" />
+    <Compile Include="EventSystem\AboutToLoadNextLevelEvent.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Find.cs" />
     <Compile Include="HarmonyHooks.cs" />
@@ -285,6 +286,7 @@
     <Compile Include="Patches\HarmonyCharacterPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CDMZSplashScreenManager.cs" />
+    <Compile Include="TestOutOfDateMod.cs" />
     <Compile Include="UI\ModsListUI.cs" />
     <Compile Include="UI\UIComponents.cs" />
   </ItemGroup>

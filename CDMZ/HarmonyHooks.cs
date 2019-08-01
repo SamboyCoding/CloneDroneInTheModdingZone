@@ -36,11 +36,13 @@ namespace CDMZ
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(EnemyFactory), nameof(EnemyFactory.SpawnEnemyWithRotation), new[] {typeof(Transform), typeof(Vector3), typeof(Vector3), typeof(CharacterModel)}), new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.PreCharacterSpawn)));
             //Patch for when a character spawns
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(Character), "Awake"), new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.PostCharacterSpawn)));
-            //Patch to fix non null safe code
+            //Patches to fix non null safe code
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method("<SpawnCurrentLevel>c__Iterator2:MoveNext"), transpiler: new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.LevelManagerSpawnCancelPatch)));
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(LevelEnemySpawner), "Start"), transpiler: new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.LevelEnemySpawnerSpawnCancelPatch)));
             //Patch for when a character('s ragdoll) is removed
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(Character), "OnDestroy"), new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.OnCharacterDestroy)));
-            //Patch to potentially disable death
+            //Patches to potentially disable death
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(FirstPersonMover), "onDeath"), new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.OnFPMDie)));
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(Character), "onDeath"), new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.OnCharacterDie)));
 
             //Damage patches
@@ -54,7 +56,25 @@ namespace CDMZ
             }
             #endregion
             
+            //Level loading 
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(LevelManager), nameof(LevelManager.SpawnCurrentLevel)), new HarmonyMethod(typeof(HarmonyHooks), nameof(OnSpawnCurrentLevel)));
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(LevelManager), "CreateLevelTransformFromLevelEditorData"), new HarmonyMethod(typeof(HarmonyHooks), nameof(OnCreateLevelTransform)));
+        }
+
+        public static void OnSpawnCurrentLevel(LevelManager __instance)
+        {
+            var ld = __instance.GetCurrentLevelDescription();
             
+            //These cases are picked up by the patch to CreateLevelTransformFromLevelEditorData as it's better.
+            if (ld.LevelTags.Contains(LevelTags.LevelEditor) || ld.IsStreamedMultiplayerLevel || ld.IsPlayfabHostedLevel || ld.IsLevelEditorLevel()) return;
+            
+            //If we're here we're on a legacy level
+            EventBus.Instance.Post(new AboutToLoadNextLevelEvent(ld.PrefabName));
+        }
+
+        public static void OnCreateLevelTransform(LevelManager __instance)
+        {
+            EventBus.Instance.Post(new AboutToLoadNextLevelEvent(__instance.GetCurrentLevelDescription()));
         }
 
 

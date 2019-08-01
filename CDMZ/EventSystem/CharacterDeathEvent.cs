@@ -6,6 +6,7 @@ namespace CDMZ.EventSystem
 
         public CharacterDeathEvent(Character c)
         {
+            CanBeCancelled = false;
             Character = c;
         }
     }

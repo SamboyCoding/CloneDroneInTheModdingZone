@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CDMZ.EventSystem
 {
-    public class PreDamageEvent : Event
+    public class CharacterPreDamageEvent : Event
     {
         public FirstPersonMover Damager { get; }
         public Character Damagee { get; }
@@ -10,7 +10,7 @@ namespace CDMZ.EventSystem
 
         public Type DamageType { get; }
 
-        public PreDamageEvent(MeleeImpactArea mia, MechBodyPart part)
+        public CharacterPreDamageEvent(MeleeImpactArea mia, MechBodyPart part)
         {
             Damager = mia.Owner;
             Damagee = part.GetOwner();
@@ -40,7 +40,7 @@ namespace CDMZ.EventSystem
                     break;
             }
             
-            new Logger("DamageSource").Debug($"{DamageType} damage being dealt from {Damager} to {Damagee}");
+            //new Logger("DamageSource").Debug($"{DamageType} damage being dealt from {Damager} to {Damagee}");
         }
 
         public enum Type
