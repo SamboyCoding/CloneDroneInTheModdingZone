@@ -53,7 +53,9 @@ namespace CDMZ
 
                     new EventBus();
 
-                    EventListener.Init(); //TODO: Make event bus detect all on creation.
+                    modText.text = "CDMZ: Enabling mods";
+
+                    ModManager.EnableAll();
 
                     modText.text = "CDMZ: Done";
 

@@ -1,3 +1,5 @@
+using CDMZ.EventSystem;
+
 namespace CDMZ
 {
     public class CDMZMod : Mod
@@ -15,6 +17,16 @@ namespace CDMZ
         public override string GetVersion()
         {
             return "1.0.0";
+        }
+
+        public override void Enable()
+        {
+            EventBus.Instance.Register(typeof(EventListener));
+        }
+
+        public override void Disable()
+        {
+            
         }
     }
 }

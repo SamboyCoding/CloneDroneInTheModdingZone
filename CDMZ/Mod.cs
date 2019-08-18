@@ -15,5 +15,9 @@ namespace CDMZ
         {
             return GetVersion();
         }
+
+        public abstract void Enable();
+
+        public abstract void Disable();
     }
 }

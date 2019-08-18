@@ -118,7 +118,7 @@ namespace CDMZ.Patches
                         pos++;
                         if (patchedFirst)
                         {
-                            //Skip the second ldarg.0 on the second iteration
+                            //Skip the second ldarg.0 on the second patch
                             enumerator.MoveNext();
                             pos++;
                         }

@@ -1,35 +1,35 @@
-using System.Linq;
 using CDMZ.EventSystem;
-using UnityEngine;
 
 namespace CDMZ
 {
     public static class EventListener
     {
-        public static void Init()
+        [EventHandler]
+        public static void OnCharacterPreSpawn(CharacterPreSpawnEvent e)
         {
-            EventBus.Instance.Register((CharacterPreSpawnEvent e) =>
-            {
-                //I don't like mk1 bows
-                if (!e.IsPlayerSpawn && e.enemyType == EnemyType.Bowman1)
-                    e.Cancel();
-            });
-            
-            EventBus.Instance.Register((CharacterPreDamageEvent e) =>
-            {
-                //Player godmode
+            //I don't like mk1 bows
+            if (!e.IsPlayerSpawn && e.enemyType == EnemyType.Bowman1)
+                e.Cancel();
+        }
+
+        [EventHandler]
+        public static void OnCharacterPreDamage(CharacterPreDamageEvent e)
+        {
+            //Player godmode
 //                if (e.Damagee.IsMainPlayer())
 //                    e.Cancel();
-            });
-            
-            EventBus.Instance.Register((AboutToLoadNextLevelEvent e) =>
-            {
-                ModdingZoneHooks.VanillaLogger.Info($"Loading level '${e.LevelName}'. Legacy: {e.IsALegacyLevel}");
-            });
+        }
 
-            EventBus.Instance.Register((MainMenuShownEvent evt) =>
-            {
-//                var log = new Logger("RaptorDump");
+        [EventHandler]
+        public static void OnLoadLevel(AboutToLoadNextLevelEvent e)
+        {
+            ModdingZoneHooks.VanillaLogger.Info($"Loading level '${e.LevelName}'. Legacy: {e.IsALegacyLevel}");
+        }
+
+        [EventHandler]
+        public static void OnMainMenuShown(MainMenuShownEvent evt)
+        {
+            //                var log = new Logger("RaptorDump");
 //                var prefab = EnemyFactory.Instance.Enemies.First(e => e.EnemyType == EnemyType.FireRaptor).EnemyPrefab;
 //                
 //                log.Debug(prefab.gameObject.ToString());
@@ -67,8 +67,6 @@ namespace CDMZ
 //                log.Debug(model.DeactivateOnDeath?.ToString());
 //                log.Debug(model.DeactivateOnFlameBreath?.ToString());
 //                log.Debug(model.ConstructionProps?.ToString());
-
-            });
         }
     }
 }

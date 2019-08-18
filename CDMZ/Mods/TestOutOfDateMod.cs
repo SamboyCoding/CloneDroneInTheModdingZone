@@ -26,5 +26,15 @@ namespace CDMZ
         {
             return "1.1.0";
         }
+
+        public override void Enable()
+        {
+            //No-op
+        }
+
+        public override void Disable()
+        {
+            //No-op
+        }
     }
 }

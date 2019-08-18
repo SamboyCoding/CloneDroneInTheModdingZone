@@ -264,14 +264,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CDMZMod.cs" />
-    <Compile Include="EventListener.cs" />
     <Compile Include="EventSystem\CharacterDeathEvent.cs" />
     <Compile Include="EventSystem\CharacterDespawnEvent.cs" />
     <Compile Include="EventSystem\CharacterPostSpawnEvent.cs" />
     <Compile Include="EventSystem\CharacterPreSpawnEvent.cs" />
     <Compile Include="EventSystem\Event.cs" />
     <Compile Include="EventSystem\EventBus.cs" />
+    <Compile Include="EventSystem\EventHandlerAttribute.cs" />
     <Compile Include="EventSystem\MainMenuShownEvent.cs" />
     <Compile Include="EventSystem\CharacterPreDamageEvent.cs" />
     <Compile Include="EventSystem\AboutToLoadNextLevelEvent.cs" />
@@ -282,11 +281,13 @@
     <Compile Include="ModdingZoneHooks.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="ModManager.cs" />
+    <Compile Include="Mods\CDMZMod.cs" />
+    <Compile Include="Mods\EventListener.cs" />
+    <Compile Include="Mods\TestOutOfDateMod.cs" />
     <Compile Include="ModTypeManager.cs" />
     <Compile Include="Patches\HarmonyCharacterPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CDMZSplashScreenManager.cs" />
-    <Compile Include="TestOutOfDateMod.cs" />
     <Compile Include="UI\ModsListUI.cs" />
     <Compile Include="UI\UIComponents.cs" />
   </ItemGroup>

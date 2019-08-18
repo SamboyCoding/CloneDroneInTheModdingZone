@@ -35,7 +35,7 @@ namespace CDMZ
         public static List<Type> AllSubclassesOf(Type t)
         {
             return AllGameRelatedTypes
-                .Where(type => t.IsAssignableFrom(type))
+                .Where(t.IsAssignableFrom)
                 .ToList();
         }
     }
