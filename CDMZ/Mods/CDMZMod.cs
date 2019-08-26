@@ -26,7 +26,7 @@ namespace CDMZ
 
         public override void Disable()
         {
-            
+            EventBus.Instance.Unregister(typeof(EventListener));
         }
     }
 }

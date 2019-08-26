@@ -12,3 +12,7 @@ CDMZInjector/obj/
 packages/
 
 *.user
+
+ModLibrary/bin/
+
+ModLibrary/obj/

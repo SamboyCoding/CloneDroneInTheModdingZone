@@ -12,11 +12,42 @@ namespace CDMZ.EventSystem
 
         private Logger _logger = new Logger("CDMZ|EventBus");
 
-        private Dictionary<Type, List<Action<Event>>> handlers = new Dictionary<Type, List<Action<Event>>>();
+        /// <summary>
+        /// Contains a list of handlers registered as a map of event type to a list of handlers that want that event.
+        /// </summary>
+        private Dictionary<Type, List<Action<Event>>> _handlers = new Dictionary<Type, List<Action<Event>>>();
+        
+        /// <summary>
+        /// Contains a list of handlers registered as a map of handler method to a tuple of event type and index in that type's handler list.
+        /// </summary>
+        private Dictionary<MethodInfo, KeyValuePair<Type, int>> _registeredMethods = new Dictionary<MethodInfo, KeyValuePair<Type, int>>();
+        
+        /// <summary>
+        /// Contains a list of handlers registered as a map of defining type to its methods. 
+        /// </summary>
+        private Dictionary<Type, List<MethodInfo>> _handlerFunctionsByParentClass = new Dictionary<Type, List<MethodInfo>>();
+        
 
         internal EventBus()
         {
             Instance = this;
+        }
+        
+        [Obsolete("Only for ModBot compat, does not support unregistering")]
+        internal void Register<T>(Action<T> handler) where T : Event
+        {
+            var type = typeof(T);
+
+            //Bloody c# generics
+            var actionEvent = new Action<Event>(evt => handler((T) Convert.ChangeType(evt, typeof(T))));
+
+            if (_handlers.ContainsKey(type))
+                _handlers[type].Add(actionEvent);
+            else
+            {
+                _logger.Debug($"Creating listener list for event type {type}");
+                _handlers[type] = new[] {actionEvent}.ToList();
+            }
         }
 
         public void Register(Type type)
@@ -27,6 +58,8 @@ namespace CDMZ.EventSystem
                         .Select(a => a.GetType())
                         .Any(t => t == typeof(EventHandlerAttribute))
                 );
+            
+            _handlerFunctionsByParentClass[type] = new List<MethodInfo>();
 
             foreach (var method in annotated)
             {
@@ -66,35 +99,43 @@ namespace CDMZ.EventSystem
                 _logger.Debug($"Found an EventHandler-annotated method {method.DeclaringType?.FullName}::{method.Name} which will be registered with event {eventType.Name}");
 
                 Register(method, eventType);
+                _handlerFunctionsByParentClass[type].Add(method);
             }
         }
 
-        internal void Register<T>(Action<T> handler) where T : Event
+        public void Unregister(Type t)
         {
-            var type = typeof(T);
-
-            //Bloody c# generics
-            var actionEvent = new Action<Event>(evt => handler((T) Convert.ChangeType(evt, typeof(T))));
-
-            if (handlers.ContainsKey(type))
-                handlers[type].Add(actionEvent);
-            else
+            foreach (var method in _handlerFunctionsByParentClass[t])
             {
-                _logger.Debug($"Creating listener list for event type {type}");
-                handlers[type] = new[] {actionEvent}.ToList();
+                var registrationInfo = _registeredMethods[method];
+                
+                //Unregister the handler itself
+                _logger.Info($"Unregistering a handler for method type {registrationInfo.Key}: {method.DeclaringType}::{method.Name}");
+                _handlers[registrationInfo.Key].RemoveAt(registrationInfo.Value);
+                
+                //Remove it from registered methods
+                _registeredMethods.Remove(method);
             }
+
+            //Remove the class from the classes list.
+            _handlerFunctionsByParentClass.Remove(t);
         }
 
         private void Register(MethodInfo handler, Type type)
         {
             var actionEvent = new Action<Event>(evt => handler.Invoke(null, new[] {Convert.ChangeType(evt, type)}));
 
-            if (handlers.ContainsKey(type))
-                handlers[type].Add(actionEvent);
+            if (_handlers.ContainsKey(type))
+            {
+                _handlers[type].Add(actionEvent);
+                var idx = _handlers.Count - 1;
+                _registeredMethods.Add(handler, new KeyValuePair<Type, int>(type, idx));
+            }
             else
             {
                 _logger.Debug($"Creating listener list for event type {type}");
-                handlers[type] = new[] {actionEvent}.ToList();
+                _handlers[type] = new[] {actionEvent}.ToList();
+                _registeredMethods.Add(handler, new KeyValuePair<Type, int>(type, 0));
             }
         }
 
@@ -107,9 +148,9 @@ namespace CDMZ.EventSystem
         {
             _logger.Debug($"Dispatching an event of type {evt.GetType()}");
 
-            if (!handlers.ContainsKey(evt.GetType())) return true;
+            if (!_handlers.ContainsKey(evt.GetType())) return true;
 
-            foreach (var action in handlers[evt.GetType()])
+            foreach (var action in _handlers[evt.GetType()])
             {
                 try
                 {

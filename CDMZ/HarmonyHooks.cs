@@ -25,7 +25,7 @@ namespace CDMZ
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(SplashScreenFlowManager), "Update"), new HarmonyMethod(typeof(HarmonyHooks), nameof(InitialSplashScreenSetup)));
 
             //Make sure the splash screen doesn't end before we want it to.
-            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(SplashScreenFlowManager), nameof(SplashScreenFlowManager.GoToNextScene)), new HarmonyMethod(typeof(CDMZSplashScreenManager), nameof(CDMZSplashScreenManager.GoToNextSceneReplacement)));
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(SplashScreenFlowManager), nameof(SplashScreenFlowManager.GoToNextScene)), new HarmonyMethod(typeof(ModSetupHandler), nameof(ModSetupHandler.GoToNextSceneReplacement)));
         }
 
         public static void DoOnLoadPatches()
@@ -47,7 +47,7 @@ namespace CDMZ
 
             //Damage patches
             foreach (var method in
-                from subclass in ModTypeManager.AllSubclassesOf(typeof(MeleeImpactArea))
+                from subclass in ReflectionHelper.AllSubclassesOf(typeof(MeleeImpactArea))
                 let method = AccessTools.Method(subclass, "tryDamageBodyPart")
                 where method.DeclaringType == subclass
                 select method)
@@ -69,12 +69,12 @@ namespace CDMZ
             if (ld.LevelTags.Contains(LevelTags.LevelEditor) || ld.IsStreamedMultiplayerLevel || ld.IsPlayfabHostedLevel || ld.IsLevelEditorLevel()) return;
             
             //If we're here we're on a legacy level
-            EventBus.Instance.Post(new AboutToLoadNextLevelEvent(ld.PrefabName));
+            EventBus.Instance.Post(new LevelAboutToLoadEvent(ld.PrefabName));
         }
 
         public static void OnCreateLevelTransform(LevelManager __instance)
         {
-            EventBus.Instance.Post(new AboutToLoadNextLevelEvent(__instance.GetCurrentLevelDescription()));
+            EventBus.Instance.Post(new LevelAboutToLoadEvent(__instance.GetCurrentLevelDescription()));
         }
 
 
@@ -126,7 +126,7 @@ namespace CDMZ
             if (_splashSetup) return;
             
             _splashSetup = true;
-            SplashScreenFlowManager.Instance.gameObject.AddComponent<CDMZSplashScreenManager>();
+            SplashScreenFlowManager.Instance.gameObject.AddComponent<ModSetupHandler>();
         }
 
         public static bool DisableMethod()

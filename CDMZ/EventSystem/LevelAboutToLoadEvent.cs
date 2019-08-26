@@ -1,6 +1,6 @@
 namespace CDMZ.EventSystem
 {
-    public class AboutToLoadNextLevelEvent : Event
+    public class LevelAboutToLoadEvent : Event
     {
         public bool IsALegacyLevel { get; }
 
@@ -10,16 +10,18 @@ namespace CDMZ.EventSystem
         
         public string LevelName => _legacyLevelName ?? LevelDescription.LevelID;
 
-        public AboutToLoadNextLevelEvent(string levelName)
+        public LevelAboutToLoadEvent(string levelName)
         {
             IsALegacyLevel = true;
             _legacyLevelName = levelName;
+            CanBeCancelled = false; //TODO Look into making cancellable, or allowing the leveldescription to be changed
         }
 
-        public AboutToLoadNextLevelEvent(LevelDescription ld)
+        public LevelAboutToLoadEvent(LevelDescription ld)
         {
             LevelDescription = ld;
             IsALegacyLevel = false;
+            CanBeCancelled = false; 
         }
     }
 }

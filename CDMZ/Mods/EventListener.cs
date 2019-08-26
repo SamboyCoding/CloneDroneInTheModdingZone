@@ -21,7 +21,7 @@ namespace CDMZ
         }
 
         [EventHandler]
-        public static void OnLoadLevel(AboutToLoadNextLevelEvent e)
+        public static void OnLoadLevel(LevelAboutToLoadEvent e)
         {
             ModdingZoneHooks.VanillaLogger.Info($"Loading level '${e.LevelName}'. Legacy: {e.IsALegacyLevel}");
         }

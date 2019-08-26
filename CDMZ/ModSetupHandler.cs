@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using CDMZ.EventSystem;
 using UnityEngine;
@@ -8,7 +10,7 @@ using UnityEngine.UI;
 
 namespace CDMZ
 {
-    public class CDMZSplashScreenManager : MonoBehaviour
+    public class ModSetupHandler : MonoBehaviour
     {
         private Logger _logger = new Logger("CDMZ|Splash");
         private Text modText;
@@ -16,6 +18,8 @@ namespace CDMZ
         private static bool _finishedLoading;
         private static bool _shouldGoToNextScene;
         private static bool _hasTriggeredSceneLoad;
+
+        private string _modDirectoryPath = Path.Combine(Path.Combine(Application.dataPath, ".."), "mods");
 
         private void Awake()
         {
@@ -44,10 +48,35 @@ namespace CDMZ
                 try
                 {
                     HarmonyHooks.DoOnLoadPatches();
-                    
+
+                    if (!Directory.Exists(_modDirectoryPath))
+                        Directory.CreateDirectory(_modDirectoryPath);
+
+                    modText.text = "CDMZ: Discovering mods";
+
+                    foreach (var file in Directory.GetFiles(_modDirectoryPath))
+                    {
+                        if (!file.EndsWith(".dll")) continue;
+                        
+                        _logger.Debug($"Loading assembly {file}");
+                        try
+                        {
+                            var asm = Assembly.LoadFile(file);
+                            ReflectionHelper.ModAssemblies.Add(asm);
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.Exception(e, $"Failed to load assembly {file}");
+                        }
+                    }
+
                     modText.text = "CDMZ: Constructing mods";
                     
                     ModManager.ConstructAll();
+
+                    modText.text = "CDMZ: Loading ModBot mods in compatibility mode";
+
+                    ModManager.LoadModBotMods();
 
                     modText.text = "CDMZ: Setting up event bus";
 
@@ -55,7 +84,7 @@ namespace CDMZ
 
                     modText.text = "CDMZ: Enabling mods";
 
-                    ModManager.EnableAll();
+                    ModManager.ExecuteEnableForEnabledMods();
 
                     modText.text = "CDMZ: Done";
 
