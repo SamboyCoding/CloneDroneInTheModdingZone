@@ -30,7 +30,7 @@ namespace CDMZ
 
         public static void DoOnLoadPatches()
         {
-            #region Character Patches
+             #region Character Patches
 
             //Patch to allow disabling spawn
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(EnemyFactory), nameof(EnemyFactory.SpawnEnemyWithRotation), new[] {typeof(Transform), typeof(Vector3), typeof(Vector3), typeof(CharacterModel)}), new HarmonyMethod(typeof(HarmonyCharacterPatches), nameof(HarmonyCharacterPatches.PreCharacterSpawn)));
@@ -63,6 +63,16 @@ namespace CDMZ
             //Level Editor
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(LevelEditorUI), nameof(LevelEditorUI.Show)), new HarmonyMethod(typeof(HarmonyHooks), nameof(OnLevelEditorShow)));
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(ObjectPlacedInLevel), nameof(ObjectPlacedInLevel.Initialize)), new HarmonyMethod(typeof(HarmonyHooks), nameof(OnLevelEditorObjectPlaced)));
+            
+            //Projectiles
+            //TODO: Look into making cancellable, possibly pre/post?
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(ProjectileManager), nameof(ProjectileManager.CreateInactiveArrow)), postfix: new HarmonyMethod(typeof(HarmonyHooks), nameof(OnProjectileCreated)));
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(ProjectileManager), nameof(ProjectileManager.CreateMortarShrapnel)), postfix: new HarmonyMethod(typeof(HarmonyHooks), nameof(OnMortarShrapnelCreated)));
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(ProjectileManager), nameof(ProjectileManager.CreateFlameBreathProjectile)), postfix: new HarmonyMethod(typeof(HarmonyHooks), nameof(OnFlameBreathParticleCreated)));
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(ProjectileManager), nameof(ProjectileManager.CreateRepairFlameProjectile)), postfix: new HarmonyMethod(typeof(HarmonyHooks), nameof(OnRepairFlameParticleCreated)));
+            
+            //Upgrades
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(FirstPersonMover), nameof(FirstPersonMover.RefreshUpgrades)), new HarmonyMethod(typeof(HarmonyHooks), nameof(PreRefreshUpgrades)), new HarmonyMethod(typeof(HarmonyHooks), nameof(PostRefreshUpgrades)));
         }
 
         public static void OnSpawnCurrentLevel(LevelManager __instance)
@@ -80,6 +90,8 @@ namespace CDMZ
         {
             EventBus.Instance.Post(new LevelAboutToLoadEvent(__instance.GetCurrentLevelDescription()));
         }
+        
+        #region LevelEditor
 
         public static void OnLevelEditorShow()
         {
@@ -91,7 +103,42 @@ namespace CDMZ
             EventBus.Instance.Post(new LevelEditorObjectPlacedEvent(__instance));
         }
 
+        #endregion
+        
+        #region Projectiles
+        
+        public static void OnProjectileCreated(Projectile __result)
+        {
+            EventBus.Instance.Post(new ProjectileCreatedEvent(__result, ProjectileCreatedEvent.Type.ARROW));
+        }
+        
+        public static void OnMortarShrapnelCreated(Projectile __result)
+        {
+            EventBus.Instance.Post(new ProjectileCreatedEvent(__result, ProjectileCreatedEvent.Type.SHRAPNEL));
+        }
+        
+        public static void OnFlameBreathParticleCreated(Projectile __result)
+        {
+            EventBus.Instance.Post(new ProjectileCreatedEvent(__result, ProjectileCreatedEvent.Type.FLAME));
+        }
+        
+        public static void OnRepairFlameParticleCreated(Projectile __result)
+        {
+            EventBus.Instance.Post(new ProjectileCreatedEvent(__result, ProjectileCreatedEvent.Type.REPAIR));
+        }
 
+        #endregion
+
+        public static void PreRefreshUpgrades(FirstPersonMover __instance)
+        {
+            EventBus.Instance.Post(new UpgradesAboutToBeRefreshedEvent(__instance));
+        }
+        
+        public static void PostRefreshUpgrades(FirstPersonMover __instance)
+        {
+            EventBus.Instance.Post(new UpgradesRefreshedEvent(__instance));
+        }
+        
         [HarmonyPatch(typeof(GameFlowManager))]
         [HarmonyPatch("ShowTitleScreen")]
         [UsedImplicitly]

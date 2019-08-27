@@ -79,6 +79,9 @@
     <Compile Include="EventSystem\MainMenuShownEvent.cs" />
     <Compile Include="EventSystem\CharacterPreDamageEvent.cs" />
     <Compile Include="EventSystem\LevelAboutToLoadEvent.cs" />
+    <Compile Include="EventSystem\ProjectileCreatedEvent.cs" />
+    <Compile Include="EventSystem\UpgradesAboutToBeRefreshedEvent.cs" />
+    <Compile Include="EventSystem\UpgradesRefreshedEvent.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Find.cs" />
     <Compile Include="HarmonyHooks.cs" />

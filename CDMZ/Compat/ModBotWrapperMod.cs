@@ -3,7 +3,7 @@ using CDMZ.EventSystem;
 
 namespace CDMZ.Compat
 {
-    //Obsolete
+    //Obsolete warning
 #pragma warning disable 618
     public class ModBotWrapperMod : Mod
     {
@@ -45,6 +45,26 @@ namespace CDMZ.Compat
             //Level editor
             RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.OnLevelEditorStarted), (LevelEditorShownEvent evt) => _wrapped.OnLevelEditorStarted());
             RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.OnObjectPlacedInLevelEditor), (LevelEditorObjectPlacedEvent evt) => _wrapped.OnObjectPlacedInLevelEditor(evt.PlacedObject.gameObject));
+            
+            //Projectiles
+            RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.OnProjectileCreated), (ProjectileCreatedEvent evt) => _wrapped.OnProjectileCreated(evt.Projectile.gameObject));
+            RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.OnArrowProjectileCreated), (ProjectileCreatedEvent evt) =>
+            {
+                if(evt.Projectile is ArrowProjectile projectile)
+                    _wrapped.OnArrowProjectileCreated(projectile);
+            });
+            RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.OnBulletProjectileCreated), (ProjectileCreatedEvent evt) =>
+            {
+                if(evt.Projectile is BulletProjectile projectile)
+                    _wrapped.OnBulletProjectileCreated(projectile,
+                        evt.ProjectileType == ProjectileCreatedEvent.Type.SHRAPNEL,
+                        evt.ProjectileType == ProjectileCreatedEvent.Type.FLAME, 
+                        evt.ProjectileType == ProjectileCreatedEvent.Type.REPAIR);
+            });
+            
+            //Upgrades
+            RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.OnUpgradesRefreshed), (UpgradesAboutToBeRefreshedEvent evt) => _wrapped.OnUpgradesRefreshed(evt.FirstPersonMover.gameObject, evt.FirstPersonMover.GetComponent<UpgradeCollection>()));
+            RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.AfterUpgradesRefreshed), (UpgradesRefreshedEvent evt) => _wrapped.AfterUpgradesRefreshed(evt.FirstPersonMover.gameObject, evt.FirstPersonMover.GetComponent<UpgradeCollection>()));
             
             //Call OnModRefreshed as it's sort of ModBot's Enable method
             if(ReflectionHelper.ClassOverridesMethod(_wrapped.GetType(), nameof(ModLibrary.Mod.OnModRefreshed)))
