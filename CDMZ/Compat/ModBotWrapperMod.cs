@@ -31,9 +31,22 @@ namespace CDMZ.Compat
 
         public override void Enable()
         {
-            RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.OnCharacterSpawned), ((CharacterPostSpawnEvent evt) => _wrapped.OnCharacterSpawned(evt.Character.gameObject)));
-            RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.OnFirstPersonMoverSpawned), (CharacterPostSpawnEvent evt) => _wrapped.OnFirstPersonMoverSpawned(evt.Character.gameObject));
+            //AFAICT OnSceneChanged is only ever called once, when the main menu is shown, with game mode NONE
+            RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.OnSceneChanged), (MainMenuShownEvent evt) => _wrapped.OnSceneChanged(GameMode.None));
             
+            //Character spawn
+            RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.OnCharacterSpawned), (CharacterPostSpawnEvent evt) => _wrapped.OnCharacterSpawned(evt.Character.gameObject));
+            RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.OnFirstPersonMoverSpawned), (CharacterPostSpawnEvent evt) =>
+            {
+                if(evt.Character is FirstPersonMover)
+                    _wrapped.OnFirstPersonMoverSpawned(evt.Character.gameObject);
+            });
+            
+            //Level editor
+            RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.OnLevelEditorStarted), (LevelEditorShownEvent evt) => _wrapped.OnLevelEditorStarted());
+            RegisterEventHandlerIfNeeded(nameof(ModLibrary.Mod.OnObjectPlacedInLevelEditor), (LevelEditorObjectPlacedEvent evt) => _wrapped.OnObjectPlacedInLevelEditor(evt.PlacedObject.gameObject));
+            
+            //Call OnModRefreshed as it's sort of ModBot's Enable method
             if(ReflectionHelper.ClassOverridesMethod(_wrapped.GetType(), nameof(ModLibrary.Mod.OnModRefreshed)))
                 _wrapped.OnModRefreshed();
         }

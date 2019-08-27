@@ -74,6 +74,8 @@
     <Compile Include="EventSystem\Event.cs" />
     <Compile Include="EventSystem\EventBus.cs" />
     <Compile Include="EventSystem\EventHandlerAttribute.cs" />
+    <Compile Include="EventSystem\LevelEditorObjectPlacedEvent.cs" />
+    <Compile Include="EventSystem\LevelEditorShownEvent.cs" />
     <Compile Include="EventSystem\MainMenuShownEvent.cs" />
     <Compile Include="EventSystem\CharacterPreDamageEvent.cs" />
     <Compile Include="EventSystem\LevelAboutToLoadEvent.cs" />

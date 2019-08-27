@@ -59,6 +59,10 @@ namespace CDMZ
             //Level loading 
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(LevelManager), nameof(LevelManager.SpawnCurrentLevel)), new HarmonyMethod(typeof(HarmonyHooks), nameof(OnSpawnCurrentLevel)));
             ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(LevelManager), "CreateLevelTransformFromLevelEditorData"), new HarmonyMethod(typeof(HarmonyHooks), nameof(OnCreateLevelTransform)));
+            
+            //Level Editor
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(LevelEditorUI), nameof(LevelEditorUI.Show)), new HarmonyMethod(typeof(HarmonyHooks), nameof(OnLevelEditorShow)));
+            ModdingZoneHooks.Harmony.Patch(AccessTools.Method(typeof(ObjectPlacedInLevel), nameof(ObjectPlacedInLevel.Initialize)), new HarmonyMethod(typeof(HarmonyHooks), nameof(OnLevelEditorObjectPlaced)));
         }
 
         public static void OnSpawnCurrentLevel(LevelManager __instance)
@@ -75,6 +79,16 @@ namespace CDMZ
         public static void OnCreateLevelTransform(LevelManager __instance)
         {
             EventBus.Instance.Post(new LevelAboutToLoadEvent(__instance.GetCurrentLevelDescription()));
+        }
+
+        public static void OnLevelEditorShow()
+        {
+            EventBus.Instance.Post(new LevelEditorShownEvent());
+        }
+        
+        public static void OnLevelEditorObjectPlaced(ObjectPlacedInLevel __instance)
+        {
+            EventBus.Instance.Post(new LevelEditorObjectPlacedEvent(__instance));
         }
 
 
